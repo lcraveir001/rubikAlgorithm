@@ -2,4 +2,4 @@
 Project By:
   Lila, Isaac, Cora, and Jack
 
-Algorithm for solving a Ruik's cube
+Algorithm for solving a Rubik's cube
