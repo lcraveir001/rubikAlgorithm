@@ -28,11 +28,7 @@ public class Cube {
         this.left = randomize();
         this.right = randomize();
         this.back = randomize(); 
-<<<<<<< HEAD
-        sides = new HashMap<>();
-=======
         this.sides = new HashMap<>();
->>>>>>> 2784671184a5f54860c5b7fa4e04e9aa1bf57667
         sides.put("face", face);
         sides.put("top", top);
         sides.put("bottom", bottom);
@@ -48,11 +44,7 @@ public class Cube {
         this.left = left;
         this.right = right;
         this.back = back; 
-<<<<<<< HEAD
-        sides = new HashMap<>();
-=======
         this.sides = new HashMap<>();
->>>>>>> 2784671184a5f54860c5b7fa4e04e9aa1bf57667
         sides.put("face", face);
         sides.put("top", top);
         sides.put("bottom", bottom);
