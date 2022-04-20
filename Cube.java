@@ -95,6 +95,21 @@ public class Cube {
         }
      }
 
+     //can be more efficient, look into eliminating j value
+     public Boolean checkSolve() {
+        for (int[][] side : sides.values()) {
+            int color = side[0][0];
+            for (int[] i : side ) {
+                for (int j : i) {
+                    if (j != color) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+     }
+
     @Override
     public String toString() {
         String output = "";
@@ -118,6 +133,8 @@ public class Cube {
 
         return output;
     }
+
+
 
 
 
