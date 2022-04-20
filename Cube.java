@@ -28,6 +28,7 @@ public class Cube {
         this.left = randomize();
         this.right = randomize();
         this.back = randomize(); 
+        sides = new HashMap<>();
         sides.put("face", face);
         sides.put("top", top);
         sides.put("bottom", bottom);
@@ -43,6 +44,7 @@ public class Cube {
         this.left = left;
         this.right = right;
         this.back = back; 
+        sides = new HashMap<>();
         sides.put("face", face);
         sides.put("top", top);
         sides.put("bottom", bottom);
@@ -105,7 +107,7 @@ public class Cube {
     private String sideToString(int[][] side) {
         String output = "";
         for(int i[] : side) {
-            output += i+"\n";
+            output += i.toString()+"\n";
         }
 
         return output;
