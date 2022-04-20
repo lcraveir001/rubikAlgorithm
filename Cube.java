@@ -66,6 +66,33 @@ public class Cube {
        return sides.get(sideName);
     }
 
+    public void setSide(String sideName, int[][] newSide){
+        if(sideName.equals("face")){
+            this.face = newSide;
+            sides.replace(sideName, newSide);
+        }
+        else if(sideName.equals("back")){
+            this.back = newSide;
+            sides.replace(sideName, newSide);
+        }
+        else if(sideName.equals("top")){
+            this.top = newSide;
+            sides.replace(sideName, newSide);
+        }
+        else if(sideName.equals("bottom")){
+            this.bottom = newSide;
+            sides.replace(sideName, newSide);
+        }
+        else if(sideName.equals("left")){
+            this.left = newSide;
+            sides.replace(sideName, newSide);
+        }
+        else{
+            this.right = newSide;
+            sides.replace(sideName, newSide);
+        }
+     }
+
     @Override
     public String toString() {
         String output = "";
