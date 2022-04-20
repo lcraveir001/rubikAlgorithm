@@ -28,6 +28,7 @@ public class Cube {
         this.left = randomize();
         this.right = randomize();
         this.back = randomize(); 
+        this.sides = new HashMap<>();
         sides.put("face", face);
         sides.put("top", top);
         sides.put("bottom", bottom);
@@ -43,6 +44,7 @@ public class Cube {
         this.left = left;
         this.right = right;
         this.back = back; 
+        this.sides = new HashMap<>();
         sides.put("face", face);
         sides.put("top", top);
         sides.put("bottom", bottom);
@@ -96,16 +98,22 @@ public class Cube {
     @Override
     public String toString() {
         String output = "";
-        for (int[][] side : sides.values()) {
-            output += sideToString(side);
+        for (String sideName : sides.keySet()) {
+            output += sideToString(sideName);
         }
         return output;
     }
 
-    private String sideToString(int[][] side) {
+    private String sideToString(String name) {
         String output = "";
+        int[][] side = sides.get(name);
+
+        output += "\n"+name + ": \n";
         for(int i[] : side) {
-            output += i+"\n";
+            for (int j : i) {
+                output += j + " ";
+            }
+            output += "\n";
         }
 
         return output;
