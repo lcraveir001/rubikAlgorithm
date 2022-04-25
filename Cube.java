@@ -67,6 +67,38 @@ public class Cube {
     public int[][] getSide(String sideName){
        return sides.get(sideName);
     }
+    
+    public int[] getRow(String sideName, int row){
+        int[][] side = getSide(sideName);
+        int[] returnRow = new int[3];
+        for (int index = 0; index < 3; index++) {
+            returnRow[index] = side[row][index];
+        }
+        return returnRow;
+    }
+
+    public void setRow(String sideName, int row, int[] newVals){
+        int[][] side = getSide(sideName);
+        for (int index = 0; index < 3; index++) {
+            side[row][index] = newVals[index];
+        }
+    }
+
+    public void setColumn(String sideName, int col, int[] newVals){
+        int[][] side = getSide(sideName);
+        for (int index = 0; index < 3; index++) {
+            side[index][col] = newVals[index];
+        }
+    }
+
+    public int[] getColumn(String sideName, int col){
+        int [][] side = getSide(sideName);
+        int[] returnCol = new int[3];
+        for (int index = 0; index < 3; index++) {
+                returnCol[index] = side[index][col];
+            }
+        return returnCol;
+    }
 
     public void setSide(String sideName, int[][] newSide){
         if(sideName.equals("face")){
@@ -97,6 +129,7 @@ public class Cube {
 
      //can be more efficient, look into eliminating j value
      public Boolean checkSolve() {
+        // equal to pseduo is_goal(node)
         for (int[][] side : sides.values()) {
             int color = side[0][0];
             for (int[] i : side ) {
