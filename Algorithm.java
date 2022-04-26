@@ -1,4 +1,5 @@
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -47,7 +48,7 @@ public class Algorithm {
         movementNotation.put(12, "last col down");
 
     }
-    public void turnRight(Cube cube, int row){
+    public Cube turnRight(Cube cube, int row){
         int[][] left = cube.getSide("left");
         int[][] face = cube.getSide("face");
         int[][] right = cube.getSide("right");
@@ -57,7 +58,7 @@ public class Algorithm {
             
         }
         
-
+        return null;
 
 
     }
@@ -65,44 +66,93 @@ public class Algorithm {
     /**
     
      */
-    public void turnLeft(Cube cube, int row){
+    public Cube turnLeft(Cube cube, int row){
         // needs to be able to store the color values as a 
+        return null;
     }
 
-    public void turnUp(Cube cube, int col){
-
+    public Cube turnUp(Cube cube, int col){
+        return null;
     }
 
-    public void turnDown(Cube cube, int col){
-
+    public Cube turnDown(Cube cube, int col){
+        return null;
     }
 
-    public void turnFace(Cube cube, int face){
-
+    public Cube turnFace(Cube cube, int face){
+        return null;
     }
 
-    public void idaStar(Cube startCube){
-
+    public ArrayDeque<Cube> idaStar(Cube startCube){
+        //bound = maxCost
+        int bound = maxCost;
+        ArrayDeque<Cube> path = new ArrayDeque<Cube>();
+        Boolean found = false;
+        while(!found){
+            int t = search(path, 0, bound);
+            if(t==-1)return path;
+            bound = t;
+        }
+        return null;
     }
 
-    public void search() {
+    public int search(ArrayDeque<Cube> path, int costToCurrent, int bound) {
         // f = costToCurrentNode + costToEndGoal()
+        //NOTE: do we even need cost() if we are passing in the cost to the current node
+        // and cost() just finds the maxCost - the cost of the current node
+        //canit we just do maxCost - cost of current?
+
+        //we can do if returns -1, then it is found
+        int t = 0;
+
+        //should t be a global variable or should we keep it local?
+
+        Cube node = path.pop();
+        int f = costToCurrent + cost();
+        if (f>bound)return f;
+        if(node.checkSolve())return -1; //FOUND
+        int min = 100;
+        for(Cube succ : getNextMoves(node)){
+            if(!path.contains(succ)){
+                path.push(succ);
+                t = search(path, costToCurrent + costTo(node, succ), bound);
+                if (t == -1) return -1;
+                if(t<min)min = t;
+                path.pop();
+            }
+        }
+        return min;
 
     }
 
     public int cost() {
         // equal to pseduo h(node)
+        //maybe change fx name to costToCheapest
         return maxCost - costToCurrentNode; 
-       
     }
 
-    public int costToEndGoal() {
+    public int costTo(Cube node, Cube succ) {
         // equal to pseduo code cost(node, succ) 
+        //should change fx name to be cost
+        //wouldn't this just be equal to 1?
+        //from current to successor is just one more move
+        //should always be one, may not need
         return 0;
     }
-    public ArrayList<String> getNextMoves() {
+    public ArrayList<Cube> getNextMoves(Cube node) {
         // equal to pseduo successors(node)
-        return null;
+        //I changed this to output an array of Cubes since the
+        //successors have to be the next closest cube states
+        //i changed the turn functions to return the output cube
+        ArrayList<Cube> successors = new ArrayList<Cube>();
+        for(int i = 0; i<=2; i++){
+            successors.add(turnDown(node, i));
+            successors.add(turnUp(node, i));
+            successors.add(turnLeft(node, i));
+            successors.add(turnRight(node, i));
+        }
+
+        return successors;
     }
 
 
