@@ -53,19 +53,6 @@ public class Algorithm {
 
 
 
-
-
-    /**
-     * 
-     * Hello evryone
-     * I just wanted to write a reminder here for myself for when 
-     * I need to mention something about cost to current
-     * I think the int can just be local per method cuz it was
-     * never really used
-     */
-
-
-
     public Cube turnRight(Cube cube, int row){
         
         int[] left = cube.getRow("left", row);
@@ -246,9 +233,20 @@ public class Algorithm {
             timer++;
             int t = search(path, 0, bound);
             if(t==-1) {
+                found = true;
                 return path;
             }
+            System.out.println("b before: " + bound);
             bound = t;
+            System.out.println("b after: "+bound);
+
+
+
+            //NOTE
+            //Bound is really big
+            //always turns out to be 2147483647
+
+
             if(timer == 100000000){
                 System.out.println("you got a problem here");
                 break;
@@ -268,7 +266,7 @@ public class Algorithm {
 
         //should t be a global variable or should we keep it local?
         Cube node = path.peekLast();
-        int f = costToCurrent + costToCheapest(costToCurrent);
+        int f = costToCurrent + costToCheapest();
         if(f>bound){
             return f;
         }
@@ -280,38 +278,35 @@ public class Algorithm {
         for(Cube succ : getNextMoves(node)){
             if(!path.contains(succ)){
                 path.push(succ);
-                t = search(path, costToCurrent + updateCost(costToCurrent), bound);
+                t = search(path, costToCurrent + updateCost(), bound);
                 if (t == -1) { // t equals found
                     return -1;
                 }
-                System.out.println("hi");
                 if(t<min) {
                     min = t;
-                    System.out.println("min to: " + min);
                 }
                 path.pop();
             }
         }
         return min;
-
     }
 
-    public int costToCheapest(int costToCurrent) {
+    public int costToCheapest() {
         // equal to pseduo h(node)
         //maybe change fx name to costToCheapest
-        // return maxCost - costToCurrentNode; 
-        return maxCost - costToCurrent;
+        return maxCost - costToCurrentNode; 
+        // return maxCost - costToCurrent;
     }
 
-    public int updateCost(int currentCost) {
+    public int updateCost() {
         // equal to pseduo code cost(node, succ) 
         //should change fx name to be cost
         //wouldn't this just be equal to 1?
         //from current to successor is just one more move
         //should always be one, may not need
         // costToCurrentNode+=1;
-        // return costToCurrentNode;
-        return currentCost+=1;
+        return costToCurrentNode;
+        // return currentCost+=1;
     }
     public ArrayList<Cube> getNextMoves(Cube node) {
         // equal to pseduo successors(node)
@@ -334,7 +329,17 @@ public class Algorithm {
     public static void main(String[] args) {
         Cube cube = new Cube();
         Algorithm algo = new Algorithm();
-        algo.idaStar(cube);
+        ArrayDeque<Cube> finalPath = algo.idaStar(cube);
+        for (Cube c : finalPath) {
+            System.out.println(c.toString());
+        }
+        //^this is not the way to go about it, but is temporary
+
+        //hello everyone
+        //the output of ida* is a stack of cubes
+        //how do we want to output the answers?
+        //for every push and pop, should we have another stack
+        //that uses the entries from the movement map?
 
     }
 } 
