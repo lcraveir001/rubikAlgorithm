@@ -8,10 +8,11 @@ import java.util.HashMap;
 
 /**
  * rubiksCube
+ *  IDA* pseudo code from: https://en.wikipedia.org/wiki/Iterative_deepening_A*
  */
 public class Algorithm {
     
-    static final HashMap<Integer, String> movementNotation = new HashMap<Integer, String>();
+    static final HashMap<Integer, String> movementNotation =  new HashMap<Integer, String>();;
     static final int maxCost = 18; // all cubes can be solved with cost of this
     
     int costToCurrentNode;
@@ -34,6 +35,7 @@ public class Algorithm {
 
     public Algorithm() {
         this.costToCurrentNode = 0; // equal to pseduocode g
+
         movementNotation.put(1,"top row right");
         movementNotation.put(2, "middle row right");
         movementNotation.put(3, "bottom row right");
@@ -48,19 +50,37 @@ public class Algorithm {
         movementNotation.put(12, "last col down");
 
     }
+
     public Cube turnRight(Cube cube, int row){
-        int[][] left = cube.getSide("left");
-        int[][] face = cube.getSide("face");
-        int[][] right = cube.getSide("right");
-        int[][] back = cube.getSide("back");
         
-        for (int index = 0; index < 3; index++) {
-            
+        int[] left = cube.getRow("left", row);
+        int[] face = cube.getRow("face", row);
+        int[] right = cube.getRow("right", row);
+        int[] back = cube.getRow("back", row);
+        
+        cube.setRow("left", row, face);
+        cube.setRow("back", row, left);
+        cube.setRow("right", row, back);
+        cube.setRow("face", row, right);
+        if (row == 0){
+            int[] top1 = cube.getRow("top", 0);
+            int[] top2 = cube.getRow("top", 1);
+            int[] top3 = cube.getRow("top", 2);
+
+            cube.setColumn("top", 2, top1);
+            cube.setColumn("top", 1, top2);
+            cube.setColumn("top", 0, top3);
         }
-        
-        return null;
+        if (row == 2){
+            int[] bottom1 = cube.getRow("bottom", 0);
+            int[] bottom2 = cube.getRow("bottom", 1);
+            int[] bottom3 = cube.getRow("bottom", 2);
 
-
+            cube.setColumn("bottom", 2, bottom1);
+            cube.setColumn("bottom", 1, bottom2);
+            cube.setColumn("bottom", 0, bottom3);
+        }
+        return cube;
     }
 
     /**
@@ -68,18 +88,134 @@ public class Algorithm {
      */
     public Cube turnLeft(Cube cube, int row){
         // needs to be able to store the color values as a 
-        return null;
+        int[] left = cube.getRow("left", row);
+        int[] face = cube.getRow("face", row);
+        int[] right = cube.getRow("right", row);
+        int[] back = cube.getRow("back", row);
+        
+        cube.setRow("face", row, left);
+        cube.setRow("right", row, face);
+        cube.setRow("back", row, right);
+        cube.setRow("left", row, back);
+        if (row == 0){
+            int[] top1 = cube.getRow("top", 0);
+            int[] top2 = cube.getRow("top", 1);
+            int[] top3 = cube.getRow("top", 2);
+
+            cube.setColumn("top", 0, top1);
+            cube.setColumn("top", 1, top2);
+            cube.setColumn("top", 2, top3);
+        }
+        if (row == 2){
+            int[] bottom1 = cube.getRow("bottom", 0);
+            int[] bottom2 = cube.getRow("bottom", 1);
+            int[] bottom3 = cube.getRow("bottom", 2);
+
+            cube.setColumn("bottom", 0, bottom1);
+            cube.setColumn("bottom", 1, bottom2);
+            cube.setColumn("bottom", 2, bottom3);
+        }
+        
+        return cube;
     }
 
     public Cube turnUp(Cube cube, int col){
-        return null;
+        int[] left = cube.getColumn("left", col);
+        int[] face = cube.getRow("face", col);
+        int[] right = cube.getRow("right", col);
+        int[] back = cube.getRow("back", col);
+        
+        cube.setRow("left", col, face);
+        cube.setRow("back", col, left);
+        cube.setRow("right", col, back);
+        cube.setRow("face", col, right);
+        if (col == 0){
+            int[] left1 = cube.getColumn("left", 0);
+            int[] left2 = cube.getColumn("left", 1);
+            int[] left3 = cube.getColumn("left", 2);
+
+            cube.setRow("left", 2, left1);
+            cube.setRow("left", 1, left2);
+            cube.setRow("left", 0, left3);
+        }
+        if (col == 2){
+            int[] right1 = cube.getRow("right", 0);
+            int[] right2 = cube.getRow("right", 1);
+            int[] right3 = cube.getRow("right", 2);
+
+            cube.setColumn("right", 2, right1);
+            cube.setColumn("right", 1, right2);
+            cube.setColumn("right", 0, right3);
+        }
+        return cube;
+    }  
+
+    /**
+    possibly turning more than just the face??
+     */
+    public Cube turnDownForWhat(Cube cube, int col){
+        int[] left = cube.getColumn("left", col);
+        int[] face = cube.getRow("face", col);
+        int[] right = cube.getRow("right", col);
+        int[] back = cube.getRow("back", col);
+        
+        cube.setRow("left", col, face);
+        cube.setRow("back", col, left);
+        cube.setRow("right", col, back);
+        cube.setRow("face", col, right);
+        if (col == 0){
+            int[] left1 = cube.getColumn("left", 0);
+            int[] left2 = cube.getColumn("left", 1);
+            int[] left3 = cube.getColumn("left", 2);
+
+            cube.setRow("left", 2, left1);
+            cube.setRow("left", 1, left2);
+            cube.setRow("left", 0, left3);
+        }
+        if (col == 2){
+            int[] right1 = cube.getRow("right", 0);
+            int[] right2 = cube.getRow("right", 1);
+            int[] right3 = cube.getRow("right", 2);
+
+            cube.setColumn("right", 0, right1);
+            cube.setColumn("right", 1, right2);
+            cube.setColumn("right", 2, right3);
+        }
+        return cube;
+
     }
 
-    public Cube turnDown(Cube cube, int col){
+    /**
+    assuming we are turning the face clockwise
+     */
+    public Cube turnFaceClockwise(Cube cube, int face){
+        // 0 = front and 1 = back for the "face" int
+        int[] front0 = cube.getRow("front", 0);
+        int[] front1 = cube.getRow("front", 1);
+        int[] front2 = cube.getRow("front", 2);
+
+        int[] back0 = cube.getRow("back", 0);
+        int[] back1 = cube.getRow("back", 1);
+        int[] back2 = cube.getRow("back", 2);
+
+        if (face == 0) {
+            cube.setColumn("front", 2, front0);
+            cube.setColumn("front", 1, front0);
+            cube.setColumn("front", 0, front0);
+        }
+        
+        if (face == 1) {
+            
+        }
+
         return null;
+        
     }
 
-    public Cube turnFace(Cube cube, int face){
+    public Cube turnFaceCounterClockwise(Cube cube, int face){
+        int[] front0 = cube.getRow("front", 0);
+        int[] front1 = cube.getRow("front", 1);
+        int[] front2 = cube.getRow("front", 2);
         return null;
     }
 
@@ -87,11 +223,21 @@ public class Algorithm {
         //bound = maxCost
         int bound = maxCost;
         ArrayDeque<Cube> path = new ArrayDeque<Cube>();
+        path.push(startCube);
         Boolean found = false;
+        System.out.println("Searching...");
+        int timer = 0;
         while(!found){
+            timer++;
             int t = search(path, 0, bound);
-            if(t==-1)return path;
+            if(t==-1) {
+                return path;
+            }
             bound = t;
+            if(timer == 1000000){
+                System.out.println("you got a problem here");
+                break;
+            }
         }
         return null;
     }
@@ -106,18 +252,27 @@ public class Algorithm {
         int t = 0;
 
         //should t be a global variable or should we keep it local?
-
-        Cube node = path.pop();
-        int f = costToCurrent + cost();
-        if (f>bound)return f;
-        if(node.checkSolve())return -1; //FOUND
-        int min = 100;
+        Cube node = path.peekLast();
+        int f = costToCurrent + costToCheapest();
+        if(f>bound){
+            return f;
+        }
+        if(node.checkSolve()) {
+            return -1; //FOUND
+            
+        }
+        int min = Integer.MAX_VALUE;
         for(Cube succ : getNextMoves(node)){
             if(!path.contains(succ)){
                 path.push(succ);
-                t = search(path, costToCurrent + costTo(node, succ), bound);
-                if (t == -1) return -1;
-                if(t<min)min = t;
+                t = search(path, costToCurrent + updateCost(), bound);
+                if (t == -1) { // t equals found
+                    return -1;
+                }
+                System.out.println("hi");
+                if(t<min) {
+                    min = t;
+                }
                 path.pop();
             }
         }
@@ -125,19 +280,20 @@ public class Algorithm {
 
     }
 
-    public int cost() {
+    public int costToCheapest() {
         // equal to pseduo h(node)
         //maybe change fx name to costToCheapest
         return maxCost - costToCurrentNode; 
     }
 
-    public int costTo(Cube node, Cube succ) {
+    public int updateCost() {
         // equal to pseduo code cost(node, succ) 
         //should change fx name to be cost
         //wouldn't this just be equal to 1?
         //from current to successor is just one more move
         //should always be one, may not need
-        return 0;
+        costToCurrentNode+=1;
+        return costToCurrentNode;
     }
     public ArrayList<Cube> getNextMoves(Cube node) {
         // equal to pseduo successors(node)
@@ -146,7 +302,7 @@ public class Algorithm {
         //i changed the turn functions to return the output cube
         ArrayList<Cube> successors = new ArrayList<Cube>();
         for(int i = 0; i<=2; i++){
-            successors.add(turnDown(node, i));
+            successors.add(turnDownForWhat(node, i));
             successors.add(turnUp(node, i));
             successors.add(turnLeft(node, i));
             successors.add(turnRight(node, i));
