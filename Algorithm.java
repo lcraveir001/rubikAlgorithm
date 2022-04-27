@@ -51,6 +51,21 @@ public class Algorithm {
 
     }
 
+
+
+
+
+    /**
+     * 
+     * Hello evryone
+     * I just wanted to write a reminder here for myself for when 
+     * I need to mention something about cost to current
+     * I think the int can just be local per method cuz it was
+     * never really used
+     */
+
+
+
     public Cube turnRight(Cube cube, int row){
         
         int[] left = cube.getRow("left", row);
@@ -234,7 +249,7 @@ public class Algorithm {
                 return path;
             }
             bound = t;
-            if(timer == 1000000){
+            if(timer == 100000000){
                 System.out.println("you got a problem here");
                 break;
             }
@@ -253,7 +268,7 @@ public class Algorithm {
 
         //should t be a global variable or should we keep it local?
         Cube node = path.peekLast();
-        int f = costToCurrent + costToCheapest();
+        int f = costToCurrent + costToCheapest(costToCurrent);
         if(f>bound){
             return f;
         }
@@ -265,13 +280,14 @@ public class Algorithm {
         for(Cube succ : getNextMoves(node)){
             if(!path.contains(succ)){
                 path.push(succ);
-                t = search(path, costToCurrent + updateCost(), bound);
+                t = search(path, costToCurrent + updateCost(costToCurrent), bound);
                 if (t == -1) { // t equals found
                     return -1;
                 }
                 System.out.println("hi");
                 if(t<min) {
                     min = t;
+                    System.out.println("min to: " + min);
                 }
                 path.pop();
             }
@@ -280,20 +296,22 @@ public class Algorithm {
 
     }
 
-    public int costToCheapest() {
+    public int costToCheapest(int costToCurrent) {
         // equal to pseduo h(node)
         //maybe change fx name to costToCheapest
-        return maxCost - costToCurrentNode; 
+        // return maxCost - costToCurrentNode; 
+        return maxCost - costToCurrent;
     }
 
-    public int updateCost() {
+    public int updateCost(int currentCost) {
         // equal to pseduo code cost(node, succ) 
         //should change fx name to be cost
         //wouldn't this just be equal to 1?
         //from current to successor is just one more move
         //should always be one, may not need
-        costToCurrentNode+=1;
-        return costToCurrentNode;
+        // costToCurrentNode+=1;
+        // return costToCurrentNode;
+        return currentCost+=1;
     }
     public ArrayList<Cube> getNextMoves(Cube node) {
         // equal to pseduo successors(node)
