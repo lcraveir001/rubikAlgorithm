@@ -256,7 +256,6 @@ public class Algorithm {
         int timer = 0;
         while(!found){
             timer++;
-            
             int t = search(path, 0, bound);
             if(t==-1) {
                 found = true;
@@ -293,6 +292,8 @@ public class Algorithm {
         //should t be a global variable or should we keep it local?
         Cube node = path.peekLast();
         int f = costToCurrent + costToCheapest(costToCurrent); // f = g + h
+        System.out.println("f: " + f);
+        System.out.println("bound here is: " + bound);
         if(f>bound){
             return f;
         }
@@ -301,8 +302,9 @@ public class Algorithm {
             
         }
         int min = Integer.MAX_VALUE;
+         System.out.println("Path length before search: " + path.size());
+        //  System.out.println("Length of sucessors: " + getNextMoves(node));
         for(Cube succ : getNextMoves(node)){
-            System.out.println(succ.toString());
             if(!path.contains(succ)){
                 path.push(succ);
                 t = search(path, costToCurrent + 1, bound);
@@ -327,7 +329,11 @@ public class Algorithm {
     public int costToCheapest(int costToCurrent) {
         // equal to pseduo h(node)
         //maybe change fx name to costToCheapest
-        return maxCost - costToCurrent; 
+        if(costToCurrent > maxCost) {
+            return maxCost;
+        } else {
+            return maxCost - costToCurrent; 
+        }
         // return maxCost - costToCurrent;
     }
 
@@ -342,18 +348,25 @@ public class Algorithm {
     //     // return currentCost+=1;
     // }
     public ArrayList<Cube> getNextMoves(Cube node) {
+        // this has an issue with sucessors being in the path already for some reason
+       
         // equal to pseduo successors(node)
         //I changed this to output an array of Cubes since the
         //successors have to be the next closest cube states
         //i changed the turn functions to return the output cube
         ArrayList<Cube> successors = new ArrayList<Cube>();
         for(int i = 0; i<=2; i++){
-            successors.add(turnDownForWhat(node, i));
-            successors.add(turnUp(node, i));
-            successors.add(turnLeft(node, i));
-            successors.add(turnRight(node, i));
+            if(turnDownForWhat(node, i) != node)successors.add(turnDownForWhat(node, i));
+            if(turnUp(node, i) != node)successors.add(turnUp(node, i));
+            if(turnLeft(node, i) != node)successors.add(turnLeft(node, i));
+            if(turnRight(node, i )!= node)successors.add(turnRight(node, i));
         }
-
+        // for(int i = 0; i < successors.size(); i++) {
+        //     if (successors.get(i) == node) {
+        //         successors.remove(i);
+        //     }
+        // }
+        // successors.add(new Cube());
         return successors;
     }
 
@@ -362,8 +375,9 @@ public class Algorithm {
     public static void main(String[] args) {
         Cube cube = new Cube();
         Algorithm algo = new Algorithm();
+        System.out.println(cube.toString());
+        System.out.println(algo.turnRight(cube, 0));
         // System.out.println(cube.toString());
-        // algo.turnRight(cube, 0);
         // System.out.println("new cube");
         // System.out.println(cube.toString());
         // algo.turnLeft(cube, 0);
@@ -382,10 +396,28 @@ public class Algorithm {
         // System.out.println("new cube 6");
         // System.out.println(cube.toString());
         
-        ArrayDeque<Cube> finalPath = algo.idaStar(cube);
-        for (Cube c : finalPath) {
-            System.out.println(c.toString());
-        }
+        // ArrayDeque<Cube> finalPath = algo.idaStar(cube);
+        // System.out.println("success?????");
+        // for (Cube c : finalPath) {
+        //     System.out.println(c.toString());
+        // }
+        // System.out.println("Cube: ");
+        // System.out.println(cube.toString());
+        // ArrayList<Cube> test = algo.getNextMoves(cube);
+        // for(Cube c : test){
+        //     // System.out.println(c.toString());
+        //     if(c == cube) {
+        //         System.out.println("Cube:\n" + cube.toString());
+
+        //         System.out.println("Succ:\n" + c.toString());
+        //     }
+
+        // }
+        // if (test.contains(cube)) {
+        //     System.out.println("ohhhh no");
+        // } else {
+        //     System.out.println("victory");
+        // }
         //^this is not the way to go about it, but is temporary
 
         //hello everyone
