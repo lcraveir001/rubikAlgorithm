@@ -56,6 +56,26 @@ public class Cube {
     }
 
     /**
+     * Deep copy constructer 
+     * @param cube
+     */
+    public Cube(Cube cube) {
+        this.face = cube.face;
+        this.top = cube.top;
+        this.bottom = cube.bottom;
+        this.left = cube.left;
+        this.right = cube.right;
+        this.back = cube.back; 
+        this.sides = new HashMap<>(cube.sides);
+        sides.put("face", face);
+        sides.put("top", top);
+        sides.put("bottom", bottom);
+        sides.put("left", left);
+        sides.put("right", right);
+        sides.put("back", back);
+    }
+
+    /**
      * broken -- need to fix so there can only be 6 squares of each color.
      */
     private int[][] randomize() {

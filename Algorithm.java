@@ -291,18 +291,22 @@ public class Algorithm {
         ArrayDeque<Cube> path = new ArrayDeque<Cube>();
         path.push(startCube);
         Boolean found = false;
-        System.out.println("Searching...");
+        // System.out.println("Searching...");
         int timer = 0;
+        System.out.println("Entering IDA* while loop.");
         while (!found) {
             timer++;
+            System.out.println("About to call search in IDA*.");
             int t = search(path, 0, bound);
+            System.out.println("Search has been called, back in IDA*.");
             if (t == -1) {
                 found = true;
+                System.out.println("Found solution, victory!");
                 return path;
             }
-            System.out.println("b before: " + bound);
-            bound = t;
-            System.out.println("b after: " + bound);
+            // System.out.println("b before: " + bound);
+            // bound = t;
+            // System.out.println("b after: " + bound);
 
             // NOTE
             // Bound is really big
@@ -313,10 +317,12 @@ public class Algorithm {
                 break;
             }
         }
+        System.out.println("Exited IDA* while loop, no solution. :(");
         return null;
     }
 
     public int search(ArrayDeque<Cube> path, int costToCurrent, int bound) {
+        System.out.println("\nSearching...");
         // f = costToCurrentNode + costToEndGoal()
         // NOTE: do we even need cost() if we are passing in the cost to the current
         // node
@@ -329,9 +335,10 @@ public class Algorithm {
         // should t be a global variable or should we keep it local?
         Cube node = path.peekLast();
         int f = costToCurrent + costToCheapest(costToCurrent); // f = g + h
-        System.out.println("f: " + f);
-        System.out.println("bound here is: " + bound);
+        System.out.println("f: " + f + ", g: " + costToCurrent + ", h:" + costToCheapest(costToCurrent));
+
         if (f > bound) {
+            System.out.println("f is greater than bound.");
             return f;
         }
         if (node.checkSolve()) {
@@ -340,7 +347,6 @@ public class Algorithm {
         }
         int min = Integer.MAX_VALUE;
         System.out.println("Path length before search: " + path.size());
-        // System.out.println("Length of sucessors: " + getNextMoves(node));
         ArrayList<Cube> successors = getNextMoves(node);
         System.out.println("successors length: " + successors.size());
         for (Cube succ : successors) {
@@ -358,17 +364,18 @@ public class Algorithm {
                 }
                 path.pop();
             } else {
-                System.out.println("successor found in path");
+                System.out.println("successor found in path.");
             }
         }
+        System.out.println("For loop did not run.");
         return min;
     }
 
     public int costToCheapest(int costToCurrent) {
         // equal to pseduo h(node)
         // maybe change fx name to costToCheapest
-        if (costToCurrent > maxCost) {
-            return maxCost;
+        if (costToCurrent > maxCost-1) {
+            return maxCost-1;
         } else {
             return maxCost - costToCurrent;
         }
@@ -386,25 +393,21 @@ public class Algorithm {
     // // return currentCost+=1;
     // }
     public ArrayList<Cube> getNextMoves(Cube node) {
-        System.out.println("in get next move");
+        // System.out.println("in get next move");
         // this has an issue with sucessors being in the path already for some reason
 
         // equal to pseduo successors(node)
-        // I changed this to output an array of Cubes since the
-        // successors have to be the next closest cube states
-        // i changed the turn functions to return the output cube
-        Cube nodeCopy = node;
+        //I changed this to output an array of Cubes since the
+        //successors have to be the next closest cube states
+        //i changed the turn functions to return the output cube
+        Cube nodeCopy = new Cube(node);
         ArrayList<Cube> successors = new ArrayList<Cube>();
-        for (int i = 0; i <= 2; i++) {
-            System.out.println("in get next move loop");
-            if (turnDownForWhat(nodeCopy, i) != node)
-                successors.add(turnDownForWhat(nodeCopy, i));
-            if (turnUp(nodeCopy, i) != node)
-                successors.add(turnUp(nodeCopy, i));
-            if (turnLeft(nodeCopy, i) != node)
-                successors.add(turnLeft(nodeCopy, i));
-            if (turnRight(nodeCopy, i) != node)
-                successors.add(turnRight(nodeCopy, i));
+        for(int i = 0; i<=2; i++){
+            // System.out.println("in get next move loop");
+            if(turnDownForWhat(nodeCopy, i) != node)successors.add(turnDownForWhat(nodeCopy, i));
+            if(turnUp(nodeCopy, i) != node)successors.add(turnUp(nodeCopy, i));
+            if(turnLeft(nodeCopy, i) != node)successors.add(turnLeft(nodeCopy, i));
+            if(turnRight(nodeCopy, i )!= node)successors.add(turnRight(nodeCopy, i));
         }
         // for(int i = 0; i < successors.size(); i++) {
         // if (successors.get(i) == node) {
@@ -447,7 +450,7 @@ public class Algorithm {
         // algo.turnFaceCounterClockwise(cube, 0);
         // System.out.println("new cube 6");
         // System.out.println(cube.toString());
-
+        
         ArrayDeque<Cube> finalPath = algo.idaStar(cube);
         System.out.println("success?????");
         // for (Cube c : finalPath) {
