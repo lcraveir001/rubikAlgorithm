@@ -15,7 +15,7 @@ public class Algorithm {
     static final HashMap<Integer, String> movementNotation =  new HashMap<Integer, String>();;
     static final int maxCost = 18; // all cubes can be solved with cost of this
     
-    int costToCurrentNode;
+    int costToCurrentNode; 
 
     /*
         int row is which row that is being turned
@@ -53,7 +53,7 @@ public class Algorithm {
 
 
 
-    public Cube turnRight(Cube cube, int row){
+    public Cube turnLeft(Cube cube, int row){
         
         int[] left = cube.getRow("left", row);
         int[] face = cube.getRow("face", row);
@@ -86,9 +86,9 @@ public class Algorithm {
     }
 
     /**
-    
+    currently turns to the right
      */
-    public Cube turnLeft(Cube cube, int row){
+    public Cube turnRight(Cube cube, int row){
         // needs to be able to store the color values as a 
         int[] left = cube.getRow("left", row);
         int[] face = cube.getRow("face", row);
@@ -202,15 +202,17 @@ public class Algorithm {
 
         if (face == 0) {
             cube.setColumn("front", 2, front0);
-            cube.setColumn("front", 1, front0);
-            cube.setColumn("front", 0, front0);
+            cube.setColumn("front", 1, front1);
+            cube.setColumn("front", 0, front2);
         }
         
         if (face == 1) {
-            
+            cube.setColumn("back", 2, back0);
+            cube.setColumn("back", 1, back1);
+            cube.setColumn("back", 0, back2);
         }
 
-        return null;
+        return cube;
         
     }
 
@@ -218,8 +220,31 @@ public class Algorithm {
         int[] front0 = cube.getRow("front", 0);
         int[] front1 = cube.getRow("front", 1);
         int[] front2 = cube.getRow("front", 2);
-        return null;
+
+        int[] back0 = cube.getRow("back", 0);
+        int[] back1 = cube.getRow("back", 1);
+        int[] back2 = cube.getRow("back", 2);
+
+        if (face == 0) {
+            cube.setColumn("front", 0, front0);
+            cube.setColumn("front", 1, front1);
+            cube.setColumn("front", 2, front2);
+        }
+        
+        if (face == 1) {
+            cube.setColumn("back", 0, back0);
+            cube.setColumn("back", 1, back1);
+            cube.setColumn("back", 2, back2);
+        }
+
+        return cube;
     }
+
+
+    /**
+     * LILA
+     * THIS IS WHERE IDA STAR IS
+     */
 
     public ArrayDeque<Cube> idaStar(Cube startCube){
         //bound = maxCost
@@ -231,6 +256,7 @@ public class Algorithm {
         int timer = 0;
         while(!found){
             timer++;
+            
             int t = search(path, 0, bound);
             if(t==-1) {
                 found = true;
@@ -244,7 +270,7 @@ public class Algorithm {
 
             //NOTE
             //Bound is really big
-            //always turns out to be 2147483647
+            //always turns out to be 2,147,483,647
 
 
             if(timer == 100000000){
@@ -266,7 +292,7 @@ public class Algorithm {
 
         //should t be a global variable or should we keep it local?
         Cube node = path.peekLast();
-        int f = costToCurrent + costToCheapest();
+        int f = costToCurrent + costToCheapest(costToCurrent); // f = g + h
         if(f>bound){
             return f;
         }
@@ -276,38 +302,45 @@ public class Algorithm {
         }
         int min = Integer.MAX_VALUE;
         for(Cube succ : getNextMoves(node)){
+            System.out.println(succ.toString());
             if(!path.contains(succ)){
                 path.push(succ);
-                t = search(path, costToCurrent + updateCost(), bound);
+                t = search(path, costToCurrent + 1, bound);
                 if (t == -1) { // t equals found
+                    System.out.println("found");
                     return -1;
                 }
-                if(t<min) {
+                else if(t<min) {
+                    System.out.println("t is less than min");
                     min = t;
+                } else {
+                    System.out.println("min is not modified.");
                 }
                 path.pop();
+            } else {
+                System.out.println("successor found in path");
             }
         }
         return min;
     }
 
-    public int costToCheapest() {
+    public int costToCheapest(int costToCurrent) {
         // equal to pseduo h(node)
         //maybe change fx name to costToCheapest
-        return maxCost - costToCurrentNode; 
+        return maxCost - costToCurrent; 
         // return maxCost - costToCurrent;
     }
 
-    public int updateCost() {
-        // equal to pseduo code cost(node, succ) 
-        //should change fx name to be cost
-        //wouldn't this just be equal to 1?
-        //from current to successor is just one more move
-        //should always be one, may not need
-        // costToCurrentNode+=1;
-        return costToCurrentNode;
-        // return currentCost+=1;
-    }
+    // public int updateCost() {
+    //     // equal to pseduo code cost(node, succ) 
+    //     //should change fx name to be cost
+    //     //wouldn't this just be equal to 1?
+    //     //from current to successor is just one more move
+    //     //should always be one, may not need
+    //     // costToCurrentNode+=1;
+    //     return costToCurrentNode+1;
+    //     // return currentCost+=1;
+    // }
     public ArrayList<Cube> getNextMoves(Cube node) {
         // equal to pseduo successors(node)
         //I changed this to output an array of Cubes since the
@@ -329,6 +362,26 @@ public class Algorithm {
     public static void main(String[] args) {
         Cube cube = new Cube();
         Algorithm algo = new Algorithm();
+        // System.out.println(cube.toString());
+        // algo.turnRight(cube, 0);
+        // System.out.println("new cube");
+        // System.out.println(cube.toString());
+        // algo.turnLeft(cube, 0);
+        // System.out.println("new cube 2");
+        // System.out.println(cube.toString());
+        // algo.turnUp(cube, 0);
+        // System.out.println("new cube 3");
+        // System.out.println(cube.toString());
+        // algo.turnDownForWhat(cube, 0);
+        // System.out.println("new cube 4");
+        // System.out.println(cube.toString());
+        // algo.turnFaceClockwise(cube, 0);
+        // System.out.println("new cube 5");
+        // System.out.println(cube.toString());
+        // algo.turnFaceCounterClockwise(cube, 0);
+        // System.out.println("new cube 6");
+        // System.out.println(cube.toString());
+        
         ArrayDeque<Cube> finalPath = algo.idaStar(cube);
         for (Cube c : finalPath) {
             System.out.println(c.toString());
@@ -340,6 +393,8 @@ public class Algorithm {
         //how do we want to output the answers?
         //for every push and pop, should we have another stack
         //that uses the entries from the movement map?
+
+        // I think returning a set of moves from the stack of the cubes
 
     }
 } 
