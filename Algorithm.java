@@ -304,7 +304,9 @@ public class Algorithm {
         int min = Integer.MAX_VALUE;
          System.out.println("Path length before search: " + path.size());
         //  System.out.println("Length of sucessors: " + getNextMoves(node));
-        for(Cube succ : getNextMoves(node)){
+        ArrayList<Cube> successors = getNextMoves(node);
+        System.out.println("successors length: " + successors.size());
+        for(Cube succ : successors){
             if(!path.contains(succ)){
                 path.push(succ);
                 t = search(path, costToCurrent + 1, bound);
@@ -348,18 +350,21 @@ public class Algorithm {
     //     // return currentCost+=1;
     // }
     public ArrayList<Cube> getNextMoves(Cube node) {
+        System.out.println("in get next move");
         // this has an issue with sucessors being in the path already for some reason
        
         // equal to pseduo successors(node)
         //I changed this to output an array of Cubes since the
         //successors have to be the next closest cube states
         //i changed the turn functions to return the output cube
+        Cube nodeCopy = node;
         ArrayList<Cube> successors = new ArrayList<Cube>();
         for(int i = 0; i<=2; i++){
-            if(turnDownForWhat(node, i) != node)successors.add(turnDownForWhat(node, i));
-            if(turnUp(node, i) != node)successors.add(turnUp(node, i));
-            if(turnLeft(node, i) != node)successors.add(turnLeft(node, i));
-            if(turnRight(node, i )!= node)successors.add(turnRight(node, i));
+            System.out.println("in get next move loop");
+            if(turnDownForWhat(nodeCopy, i) != node)successors.add(turnDownForWhat(nodeCopy, i));
+            if(turnUp(nodeCopy, i) != node)successors.add(turnUp(nodeCopy, i));
+            if(turnLeft(nodeCopy, i) != node)successors.add(turnLeft(nodeCopy, i));
+            if(turnRight(nodeCopy, i )!= node)successors.add(turnRight(nodeCopy, i));
         }
         // for(int i = 0; i < successors.size(); i++) {
         //     if (successors.get(i) == node) {
@@ -373,10 +378,20 @@ public class Algorithm {
 
 
     public static void main(String[] args) {
-        Cube cube = new Cube();
+        int[][] face = {{0,0,0}, {0,0,0}, {4,4,4}};
+        int[][] top = {{1,1,1}, {1,1,1}, {1,1,1}};
+        int[][] bottom = {{2,2,2}, {2,2,2}, {2,2,2}};
+        int[][] left = {{3,3,3}, {3,3,3}, {0,0,0}};
+        int[][] right = {{4,4,4}, {4,4,4}, {5,5,5}};
+        int[][] back = {{5,5,5}, {5,5,5}, {3,3,3}};
+
+        Cube cube = new Cube(face, top, bottom, left, right, back);
+
+
+        // Cube cube = new Cube();
         Algorithm algo = new Algorithm();
-        System.out.println(cube.toString());
-        System.out.println(algo.turnRight(cube, 0));
+        // System.out.println(cube.toString());
+        // System.out.println(algo.turnRight(cube, 0));
         // System.out.println(cube.toString());
         // System.out.println("new cube");
         // System.out.println(cube.toString());
@@ -396,8 +411,8 @@ public class Algorithm {
         // System.out.println("new cube 6");
         // System.out.println(cube.toString());
         
-        // ArrayDeque<Cube> finalPath = algo.idaStar(cube);
-        // System.out.println("success?????");
+        ArrayDeque<Cube> finalPath = algo.idaStar(cube);
+        System.out.println("success?????");
         // for (Cube c : finalPath) {
         //     System.out.println(c.toString());
         // }

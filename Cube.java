@@ -35,6 +35,8 @@ public class Cube {
         sides.put("left", left);
         sides.put("right", right);
         sides.put("back", back);
+
+        
     }
 
     public Cube(int[][] face, int[][]top, int[][] bottom, int[][]left, int[][] right, int[][] back){
@@ -53,6 +55,9 @@ public class Cube {
         sides.put("back", back);
     }
 
+    /**
+     * broken -- need to fix so there can only be 6 squares of each color.
+     */
     private int[][] randomize() {
         Random rand = new Random();
         int[][] side = new int[3][3];
