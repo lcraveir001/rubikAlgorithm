@@ -444,15 +444,9 @@ public class Algorithm {
         // algo.turnFaceCounterClockwise(cube, 0);
         // System.out.println("new cube 6");
         // System.out.println(cube.toString());
-<<<<<<< HEAD
         
         ArrayDeque<Cube> finalPath = algo.idaStar(cube);
         System.out.println("success?????");
-=======
-
-        // ArrayDeque<Cube> finalPath = algo.idaStar(cube);
-        // System.out.println("success?????");
->>>>>>> 0bad5e9e171e67c884c2c4db75288c1d6956bb34
         // for (Cube c : finalPath) {
         // System.out.println(c.toString());
         // }
