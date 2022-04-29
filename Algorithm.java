@@ -254,10 +254,10 @@ public class Algorithm {
             int[] right = cube.getColumn("right", 0);
             int[] bottom = cube.getRow("bottom", 2);
 
-            cube.setRow("left", 2, top);
-            cube.setColumn("top", 0, right);
-            cube.setRow("right", 2, bottom);
-            cube.setColumn("bottom", 2, left);
+            cube.setColumn("left", 2, top);
+            cube.setRow("top", 2, right);
+            cube.setColumn("right", 0, bottom);
+            cube.setRow("bottom", 2, left);
 
         }
 
@@ -271,10 +271,10 @@ public class Algorithm {
             int[] right = cube.getColumn("right", 2);
             int[] bottom = cube.getRow("bottom", 0);
 
-            cube.setRow("left", 0, top);
-            cube.setColumn("top", 2, right);
-            cube.setRow("right", 0, bottom);
-            cube.setColumn("bottom", 0, left);
+            cube.setColumn("left", 0, top);
+            cube.setRow("top", 0, right);
+            cube.setColumn("right", 2, bottom);
+            cube.setRow("bottom", 0, left);
         }
 
         return cube;
@@ -414,7 +414,7 @@ public class Algorithm {
         Cube cube = new Cube();
         Algorithm algo = new Algorithm();
         System.out.println(cube.toString());
-        System.out.println(algo.turnRight(cube, 0));
+        // System.out.println(algo.turnRight(cube, 0));
         // System.out.println(cube.toString());
         // System.out.println("new cube");
         // System.out.println(cube.toString());
@@ -430,9 +430,9 @@ public class Algorithm {
         // algo.turnFaceClockwise(cube, 1);
         // System.out.println("new cube 5");
         // System.out.println(cube.toString());
-        // algo.turnFaceCounterClockwise(cube, 0);
-        // System.out.println("new cube 6");
-        // System.out.println(cube.toString());
+        algo.turnFaceCounterClockwise(cube, 0);
+        System.out.println("new cube 6");
+        System.out.println(cube.toString());
 
         // ArrayDeque<Cube> finalPath = algo.idaStar(cube);
         // System.out.println("success?????");
