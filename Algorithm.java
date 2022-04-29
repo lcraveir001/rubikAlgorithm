@@ -291,7 +291,6 @@ public class Algorithm {
         ArrayDeque<Cube> path = new ArrayDeque<Cube>();
         path.push(startCube);
         Boolean found = false;
-        // System.out.println("Searching...");
         int timer = 0;
         System.out.println("Entering IDA* while loop.");
         while (!found) {
@@ -304,9 +303,9 @@ public class Algorithm {
                 System.out.println("Found solution, victory!");
                 return path;
             }
-            // System.out.println("b before: " + bound);
-            // bound = t;
-            // System.out.println("b after: " + bound);
+            System.out.println("b before: " + bound);
+            bound = t;
+            System.out.println("b after: " + bound);
 
             // NOTE
             // Bound is really big
@@ -322,7 +321,9 @@ public class Algorithm {
     }
 
     public int search(ArrayDeque<Cube> path, int costToCurrent, int bound) {
+        Integer copyCostToCurrent = costToCurrent;
         System.out.println("\nSearching...");
+        System.out.println("Cost to current: " + costToCurrent);
         // f = costToCurrentNode + costToEndGoal()
         // NOTE: do we even need cost() if we are passing in the cost to the current
         // node
@@ -334,8 +335,10 @@ public class Algorithm {
 
         // should t be a global variable or should we keep it local?
         Cube node = path.peekLast();
-        int f = costToCurrent + costToCheapest(costToCurrent); // f = g + h
-        System.out.println("f: " + f + ", g: " + costToCurrent + ", h:" + costToCheapest(costToCurrent));
+        int costToCheapest = costToCheapest(copyCostToCurrent);
+        System.out.println("Cost to cheapest: " + costToCheapest);
+        int f = copyCostToCurrent + costToCheapest; // f = g + h
+        System.out.println("f: " + f);
 
         if (f > bound) {
             System.out.println("f is greater than bound.");
@@ -348,11 +351,11 @@ public class Algorithm {
         int min = Integer.MAX_VALUE;
         System.out.println("Path length before search: " + path.size());
         ArrayList<Cube> successors = getNextMoves(node);
-        System.out.println("successors length: " + successors.size());
+        System.out.println("Successors length: " + successors.size());
         for (Cube succ : successors) {
             if (!path.contains(succ)) {
                 path.push(succ);
-                t = search(path, costToCurrent + 1, bound);
+                t = search(path, copyCostToCurrent + 1, bound);
                 if (t == -1) { // t equals found
                     System.out.println("found");
                     return -1;
@@ -367,17 +370,18 @@ public class Algorithm {
                 System.out.println("successor found in path.");
             }
         }
-        System.out.println("For loop did not run.");
+        System.out.println("Exited for loop");
         return min;
     }
 
     public int costToCheapest(int costToCurrent) {
+        Integer copyCostToCurrent = costToCurrent;
         // equal to pseduo h(node)
         // maybe change fx name to costToCheapest
-        if (costToCurrent > maxCost-1) {
+        if (copyCostToCurrent > maxCost-1) {
             return maxCost-1;
         } else {
-            return maxCost - costToCurrent;
+            return maxCost - copyCostToCurrent;
         }
         // return maxCost - costToCurrent;
     }
