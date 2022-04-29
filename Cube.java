@@ -57,7 +57,7 @@ public class Cube {
 
     /**
      * Deep copy constructer 
-     * @param cube
+     * @param cube cube to make copy of
      */
     public Cube(Cube cube) {
         this.face = cube.face;
@@ -80,10 +80,22 @@ public class Cube {
      */
     private int[][] randomize() {
         Random rand = new Random();
+
+        HashMap<Integer, Integer> counts = new HashMap<>();
+        ArrayList<Integer> possibleColors = new ArrayList<>();
+        possibleColors.addAll(List.of(0,1,2,3,4,5));
+        for(int x : possibleColors) {
+            counts.put(x,0);
+        }
+        
         int[][] side = new int[3][3];
         for (int i = 0; i < side.length; i++) {
             for(int j = 0; j<side.length; j++){
-                side[i][j] = rand.nextInt(6);
+                int color = rand.nextInt(possibleColors.size()-1);
+                side[i][j] = color;
+                if(counts.get(color) >= 6) {
+                    possibleColors.remove(Integer.valueOf(color));
+                }
             }
         }
         return side;
@@ -152,15 +164,25 @@ public class Cube {
         }
      }
 
-     //can be more efficient, look into eliminating j value
+     // can be more efficient, look into eliminating j value
      public Boolean checkSolve() {
         // equal to pseduo is_goal(node)
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.addAll(List.of(0,1,2,3,4,5));
         for (int[][] side : sides.values()) {
+
             int color = side[0][0];
-            for (int[] i : side ) {
-                for (int j : i) {
-                    if (j != color) {
-                        return false;
+            System.out.println(colors);
+            System.out.println(color);
+            if (!colors.contains(color)){
+                return false;
+            } else {
+                colors.remove(Integer.valueOf(color));
+                for (int[] i : side ) {
+                    for (int j : i) {
+                        if (j != color) {
+                            return false;
+                        }
                     }
                 }
             }
