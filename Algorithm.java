@@ -334,7 +334,8 @@ public class Algorithm {
         int t = 0;
 
         // should t be a global variable or should we keep it local?
-        Cube node = path.peekLast();
+        Cube node = path.peek();
+        System.out.println("node: " + node.toString());
         int costToCheapest = costToCheapest(copyCostToCurrent);
         System.out.println("Cost to cheapest: " + costToCheapest);
         int f = copyCostToCurrent + costToCheapest; // f = g + h
@@ -410,14 +411,18 @@ public class Algorithm {
         //I changed this to output an array of Cubes since the
         //successors have to be the next closest cube states
         //i changed the turn functions to return the output cube
-        Cube nodeCopy = new Cube(node);
+        
         ArrayList<Cube> successors = new ArrayList<Cube>();
         for(int i = 0; i<=2; i++){
             // System.out.println("in get next move loop");
-            if(turnRight(nodeCopy, i )!= node)successors.add(turnRight(nodeCopy, i));
-            if(turnDownForWhat(nodeCopy, i) != node)successors.add(turnDownForWhat(nodeCopy, i));
-            if(turnUp(nodeCopy, i) != node)successors.add(turnUp(nodeCopy, i));
-            if(turnLeft(nodeCopy, i) != node)successors.add(turnLeft(nodeCopy, i));
+            Cube nodeCopy = new Cube(node);
+            if(turnRight(nodeCopy, i )!= node)successors.add(nodeCopy);
+            nodeCopy = new Cube(node);
+            if(turnDownForWhat(nodeCopy, i) != node)successors.add(nodeCopy);
+            nodeCopy = new Cube(node);
+            if(turnUp(nodeCopy, i) != node)successors.add(nodeCopy);
+            nodeCopy = new Cube(node);
+            if(turnLeft(nodeCopy, i) != node)successors.add(nodeCopy);
         }
         // for(int i = 0; i < successors.size(); i++) {
         // if (successors.get(i) == node) {
@@ -463,6 +468,17 @@ public class Algorithm {
         
         ArrayDeque<Cube> finalPath = algo.idaStar(cube);
         System.out.println("success?????");
+
+
+        /**
+         * Hello folks!
+         * we still need to figure out how to print the path
+         * in a helpful way, but otherwise I think it works!!
+         * :)
+         */
+
+
+
         // for (Cube c : finalPath) {
         // System.out.println(c.toString());
         // }
