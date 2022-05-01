@@ -60,12 +60,43 @@ public class Cube {
      * @param cube cube to make copy of
      */
     public Cube(Cube cube) {
-        this.face = cube.face;
-        this.top = cube.top;
-        this.bottom = cube.bottom;
-        this.left = cube.left;
-        this.right = cube.right;
-        this.back = cube.back; 
+        this.face = new int[3][3];
+        this.top = new int[3][3];
+        this.bottom = new int[3][3];
+        this.left = new int[3][3];
+        this.right = new int[3][3];
+        this.back = new int[3][3];
+
+        for(int i =0; i<3; i++){
+            for(int j =0; j<3; j++){
+                this.face[i][j]=cube.getSide("face")[i][j];
+            }
+        }
+        for(int i =0; i<3; i++){
+            for(int j =0; j<3; j++){
+                this.top[i][j]=cube.getSide("top")[i][j];
+            }
+        }
+        for(int i =0; i<3; i++){
+            for(int j =0; j<3; j++){
+                this.bottom[i][j]=cube.getSide("bottom")[i][j];
+            }
+        }
+        for(int i =0; i<3; i++){
+            for(int j =0; j<3; j++){
+                this.left[i][j]=cube.getSide("left")[i][j];
+            }
+        }
+        for(int i =0; i<3; i++){
+            for(int j =0; j<3; j++){
+                this.right[i][j]=cube.getSide("right")[i][j];
+            }
+        }
+        for(int i =0; i<3; i++){
+            for(int j =0; j<3; j++){
+                this.back[i][j]=cube.getSide("back")[i][j];
+            }
+        }
         this.sides = new HashMap<>(cube.sides);
         sides.put("face", face);
         sides.put("top", top);
@@ -137,7 +168,7 @@ public class Cube {
         return returnCol;
     }
 
-    public void setSide(String sideName, int[][] newSide){
+    public void setSide(String sideName, int[][] newSide){        
         if(sideName.equals("face")){
             this.face = newSide;
             sides.replace(sideName, newSide);
