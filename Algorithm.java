@@ -345,17 +345,23 @@ public class Algorithm {
             return f;
         }
         if (node.checkSolve()) {
+            System.out.println("solution found in search");
             return -1; // FOUND
+            
 
         }
+        //here [0, 1, 2, 3, 4, 5] is printed...why?
+        //no where is an array printed
         int min = Integer.MAX_VALUE;
         System.out.println("Path length before search: " + path.size());
         ArrayList<Cube> successors = getNextMoves(node);
         System.out.println("Successors length: " + successors.size());
         for (Cube succ : successors) {
             if (!path.contains(succ)) {
+                System.out.println("succ: " + succ.toString());
                 path.push(succ);
                 t = search(path, copyCostToCurrent + 1, bound);
+                System.out.println("t is:"+t);
                 if (t == -1) { // t equals found
                     System.out.println("found");
                     return -1;
@@ -379,7 +385,7 @@ public class Algorithm {
         // equal to pseduo h(node)
         // maybe change fx name to costToCheapest
         if (copyCostToCurrent > maxCost-1) {
-            return maxCost-1;
+            return maxCost+1;
         } else {
             return maxCost - copyCostToCurrent;
         }
@@ -408,10 +414,10 @@ public class Algorithm {
         ArrayList<Cube> successors = new ArrayList<Cube>();
         for(int i = 0; i<=2; i++){
             // System.out.println("in get next move loop");
+            if(turnRight(nodeCopy, i )!= node)successors.add(turnRight(nodeCopy, i));
             if(turnDownForWhat(nodeCopy, i) != node)successors.add(turnDownForWhat(nodeCopy, i));
             if(turnUp(nodeCopy, i) != node)successors.add(turnUp(nodeCopy, i));
             if(turnLeft(nodeCopy, i) != node)successors.add(turnLeft(nodeCopy, i));
-            if(turnRight(nodeCopy, i )!= node)successors.add(turnRight(nodeCopy, i));
         }
         // for(int i = 0; i < successors.size(); i++) {
         // if (successors.get(i) == node) {
@@ -423,12 +429,12 @@ public class Algorithm {
     }
 
     public static void main(String[] args) {
-        int[][] face = { { 0, 0, 0 }, { 0, 0, 0 }, { 4, 4, 4 } };
+        int[][] face = { { 4, 4, 4 }, { 0, 0, 0 }, { 0, 0, 0 } };
         int[][] top = { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
         int[][] bottom = { { 2, 2, 2 }, { 2, 2, 2 }, { 2, 2, 2 } };
-        int[][] left = { { 3, 3, 3 }, { 3, 3, 3 }, { 0, 0, 0 } };
-        int[][] right = { { 4, 4, 4 }, { 4, 4, 4 }, { 5, 5, 5 } };
-        int[][] back = { { 5, 5, 5 }, { 5, 5, 5 }, { 3, 3, 3 } };
+        int[][] left = { { 0, 0, 0 }, { 3, 3, 3 }, { 3, 3, 3 } };
+        int[][] right = { { 5, 5, 5 }, { 4, 4, 4 }, { 4, 4, 4 } };
+        int[][] back = { { 3, 3, 3 }, { 5, 5, 5 }, { 5, 5, 5 } };
 
         Cube cube = new Cube(face, top, bottom, left, right, back);
 
