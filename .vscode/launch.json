@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Algorithm",
+            "request": "launch",
+            "mainClass": "Algorithm",
+            "projectName": "rubikAlgorithm_67f67a5d"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"

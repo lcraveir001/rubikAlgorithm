@@ -3,9 +3,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-//hello every one 
-//this is superior to code together
-
 /**
  * rubiksCube
  * IDA* pseudo code from: https://en.wikipedia.org/wiki/Iterative_deepening_A*
@@ -107,22 +104,22 @@ public class Algorithm {
         cube.setRow("back", row, right);
         cube.setRow("left", row, back);
         if (row == 0) {
-            int[] top1 = cube.getRow("top", 0);
-            int[] top2 = cube.getRow("top", 1);
-            int[] top3 = cube.getRow("top", 2);
+            int[] top1 = cube.getColumn("top", 0);
+            int[] top2 = cube.getColumn("top", 1);
+            int[] top3 = cube.getColumn("top", 2);
 
-            cube.setColumn("top", 0, top1);
-            cube.setColumn("top", 1, top2);
-            cube.setColumn("top", 2, top3);
+            cube.setRow("top", 2, top1);
+            cube.setRow("top", 1, top2);
+            cube.setRow("top", 0, top3);
         }
         if (row == 2) {
-            int[] bottom1 = cube.getRow("bottom", 0);
-            int[] bottom2 = cube.getRow("bottom", 1);
-            int[] bottom3 = cube.getRow("bottom", 2);
+            int[] bottom1 = cube.getColumn("bottom", 0);
+            int[] bottom2 = cube.getColumn("bottom", 1);
+            int[] bottom3 = cube.getColumn("bottom", 2);
 
-            cube.setColumn("bottom", 0, bottom1);
-            cube.setColumn("bottom", 1, bottom2);
-            cube.setColumn("bottom", 2, bottom3);
+            cube.setRow("bottom", 2, bottom1);
+            cube.setRow("bottom", 1, bottom2);
+            cube.setRow("bottom", 0, bottom3);
         }
 
         return cube;
@@ -166,6 +163,8 @@ public class Algorithm {
     public Cube turnDownForWhat(Cube cube, int col) {
         int[] bottom = cube.getColumn("bottom", col);
         int[] face = cube.getColumn("face", col);
+        face = swap(face);
+
         int[] top = cube.getColumn("top", col);
         int[] back = cube.getColumn("back", col);
 
@@ -216,6 +215,7 @@ public class Algorithm {
             int[] left = cube.getColumn("left", 2);
             int[] top = cube.getRow("top", 2);
             int[] right = cube.getColumn("right", 0);
+            right = swap(right);
             int[] bottom = cube.getRow("bottom", 2);
 
             cube.setRow("top", 2, left);
@@ -233,6 +233,7 @@ public class Algorithm {
             int[] left = cube.getColumn("left", 0);
             int[] top = cube.getRow("top", 0);
             int[] right = cube.getColumn("right", 2);
+            right = swap(right);
             int[] bottom = cube.getRow("bottom", 0);
 
             cube.setRow("top", 0, left);
@@ -263,6 +264,7 @@ public class Algorithm {
             int[] top = cube.getRow("top", 2);
             int[] right = cube.getColumn("right", 0);
             int[] bottom = cube.getRow("bottom", 2);
+            bottom = swap(bottom);
 
             cube.setColumn("left", 2, top);
             cube.setRow("top", 2, right);
@@ -280,6 +282,7 @@ public class Algorithm {
             int[] top = cube.getRow("top", 0);
             int[] right = cube.getColumn("right", 2);
             int[] bottom = cube.getRow("bottom", 0);
+            bottom = swap(bottom);
 
             cube.setColumn("left", 0, top);
             cube.setRow("top", 0, right);
@@ -358,11 +361,10 @@ public class Algorithm {
         if (node.checkSolve()) {
             System.out.println("solution found in search");
             return -1; // FOUND
-            
 
         }
-        //here [0, 1, 2, 3, 4, 5] is printed...why?
-        //no where is an array printed
+        // here [0, 1, 2, 3, 4, 5] is printed...why?
+        // no where is an array printed
         int min = Integer.MAX_VALUE;
         System.out.println("Path length before search: " + path.size());
         ArrayList<Cube> successors = getNextMoves(node);
@@ -372,7 +374,7 @@ public class Algorithm {
                 System.out.println("succ: " + succ.toString());
                 path.push(succ);
                 t = search(path, copyCostToCurrent + 1, bound);
-                System.out.println("t is:"+t);
+                System.out.println("t is:" + t);
                 if (t == -1) { // t equals found
                     System.out.println("found");
                     return -1;
@@ -395,8 +397,8 @@ public class Algorithm {
         Integer copyCostToCurrent = costToCurrent;
         // equal to pseduo h(node)
         // maybe change fx name to costToCheapest
-        if (copyCostToCurrent > maxCost-1) {
-            return maxCost+1;
+        if (copyCostToCurrent > maxCost - 1) {
+            return maxCost + 1;
         } else {
             return maxCost - copyCostToCurrent;
         }
@@ -416,28 +418,34 @@ public class Algorithm {
     public ArrayList<Cube> getNextMoves(Cube node) {
         ArrayList<Cube> successors = new ArrayList<Cube>();
         Cube nodeCopy = new Cube(node);
-        for(int i = 0; i<=2; i++){
-            if(turnRight(nodeCopy, i )!= node)successors.add(nodeCopy);
+        for (int i = 0; i <= 2; i++) {
+            if (turnRight(nodeCopy, i) != node)
+                successors.add(nodeCopy);
             nodeCopy = new Cube(node);
-            if(turnDownForWhat(nodeCopy, i) != node)successors.add(nodeCopy);
+            if (turnDownForWhat(nodeCopy, i) != node)
+                successors.add(nodeCopy);
             nodeCopy = new Cube(node);
-            if(turnUp(nodeCopy, i) != node)successors.add(nodeCopy);
+            if (turnUp(nodeCopy, i) != node)
+                successors.add(nodeCopy);
             nodeCopy = new Cube(node);
-            if(turnLeft(nodeCopy, i) != node)successors.add(nodeCopy);
+            if (turnLeft(nodeCopy, i) != node)
+                successors.add(nodeCopy);
         }
-        for(int j=0; j<=1; j++){
+        for (int j = 0; j <= 1; j++) {
             nodeCopy = new Cube(node);
-            if(turnFaceClockwise(nodeCopy, j) != node)successors.add(nodeCopy);
+            if (turnFaceClockwise(nodeCopy, j) != node)
+                successors.add(nodeCopy);
             nodeCopy = new Cube(node);
-            if(turnFaceCounterClockwise(nodeCopy, j) != node)successors.add(nodeCopy);
+            if (turnFaceCounterClockwise(nodeCopy, j) != node)
+                successors.add(nodeCopy);
         }
         return successors;
     }
 
     public static void main(String[] args) {
         int[][] face = { { 4, 4, 4 }, { 0, 0, 0 }, { 0, 0, 0 } };
-        int[][] top = { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
-        int[][] bottom = { { 2, 2, 2 }, { 2, 2, 2 }, { 2, 2, 2 } };
+        int[][] top = { { 4, 1, 1 }, { 3, 1, 5 }, { 2, 1, 1 } };
+        int[][] bottom = { { 3, 2, 5 }, { 4, 8, 1 }, { 7, 0, 5 } };
         int[][] left = { { 0, 0, 0 }, { 3, 3, 3 }, { 3, 3, 3 } };
         int[][] right = { { 5, 5, 5 }, { 4, 4, 4 }, { 4, 4, 4 } };
         int[][] back = { { 3, 3, 3 }, { 5, 5, 5 }, { 5, 5, 5 } };
@@ -446,12 +454,12 @@ public class Algorithm {
 
         // Cube cube = new Cube();
         Algorithm algo = new Algorithm();
-        // System.out.println(cube.toString());
-        // System.out.println(algo.turnRight(cube, 0));
+        System.out.println(cube.toString());
+        // System.out.println(algo.turnRight(cube, 2));
         // System.out.println(cube.toString());
         // System.out.println("new cube");
         // System.out.println(cube.toString());
-        // algo.turnLeft(cube, 2);
+        // algo.turnLeft(cube, 0);
         // System.out.println("new cube 2");
         // System.out.println(cube.toString());
         // algo.turnUp(cube, 2);
@@ -460,16 +468,15 @@ public class Algorithm {
         // algo.turnDownForWhat(cube, 2);
         // System.out.println("new cube 4");
         // System.out.println(cube.toString());
-        // algo.turnFaceClockwise(cube, 1);
+        // algo.turnFaceClockwise(cube, 0);
         // System.out.println("new cube 5");
         // System.out.println(cube.toString());
         // algo.turnFaceCounterClockwise(cube, 0);
         // System.out.println("new cube 6");
         // System.out.println(cube.toString());
-        
+
         ArrayDeque<Cube> finalPath = algo.idaStar(cube);
         System.out.println("success?????");
-
 
         /**
          * Hello folks!
@@ -477,8 +484,6 @@ public class Algorithm {
          * in a helpful way, but otherwise I think it works!!
          * :)
          */
-
-
 
         // for (Cube c : finalPath) {
         // System.out.println(c.toString());
