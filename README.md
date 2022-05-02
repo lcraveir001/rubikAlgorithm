@@ -12,3 +12,4 @@ We attempted to use an algorithm to solve a random or manually set (with input) 
 We used six 2D arrays to represent each side of the cube
 
 ## Outcome
+Solves a preset Rubik's Cube in two moves.
