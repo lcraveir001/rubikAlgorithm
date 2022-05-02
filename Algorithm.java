@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public class Algorithm {
 
-    static final HashMap<Integer, String> movementNotation = new HashMap<Integer, String>();;
+    static final HashMap<Integer, String> movementNotation = new HashMap<Integer, String>();
     static final int maxCost = 18; // all cubes can be solved with cost of this
 
     int costToCurrentNode;
@@ -243,7 +243,6 @@ public class Algorithm {
         }
 
         return cube;
-
     }
 
     public Cube turnFaceCounterClockwise(Cube cube, int face) {
