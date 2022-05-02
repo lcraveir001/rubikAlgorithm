@@ -51,6 +51,15 @@ public class Algorithm {
 
     }
 
+    public int[] swap(int[] arr) {
+        int a = arr[0];
+        int b = arr[2];
+        arr[0] = b;
+        arr[2] = a;
+
+        return arr;
+    }
+
     public Cube turnLeft(Cube cube, int row) {
 
         int[] left = cube.getRow("left", row);
@@ -121,6 +130,7 @@ public class Algorithm {
 
     public Cube turnUp(Cube cube, int col) {
         int[] bottom = cube.getColumn("bottom", col);
+        bottom = swap(bottom);
         int[] face = cube.getColumn("face", col);
         int[] top = cube.getColumn("top", col);
         int[] back = cube.getColumn("back", col);
@@ -404,18 +414,9 @@ public class Algorithm {
     // // return currentCost+=1;
     // }
     public ArrayList<Cube> getNextMoves(Cube node) {
-        // System.out.println("in get next move");
-        // this has an issue with sucessors being in the path already for some reason
-
-        // equal to pseduo successors(node)
-        //I changed this to output an array of Cubes since the
-        //successors have to be the next closest cube states
-        //i changed the turn functions to return the output cube
-        
         ArrayList<Cube> successors = new ArrayList<Cube>();
+        Cube nodeCopy = new Cube(node);
         for(int i = 0; i<=2; i++){
-            // System.out.println("in get next move loop");
-            Cube nodeCopy = new Cube(node);
             if(turnRight(nodeCopy, i )!= node)successors.add(nodeCopy);
             nodeCopy = new Cube(node);
             if(turnDownForWhat(nodeCopy, i) != node)successors.add(nodeCopy);
@@ -424,12 +425,12 @@ public class Algorithm {
             nodeCopy = new Cube(node);
             if(turnLeft(nodeCopy, i) != node)successors.add(nodeCopy);
         }
-        // for(int i = 0; i < successors.size(); i++) {
-        // if (successors.get(i) == node) {
-        // successors.remove(i);
-        // }
-        // }
-        // successors.add(new Cube());
+        for(int j=0; j<=1; j++){
+            nodeCopy = new Cube(node);
+            if(turnFaceClockwise(nodeCopy, j) != node)successors.add(nodeCopy);
+            nodeCopy = new Cube(node);
+            if(turnFaceCounterClockwise(nodeCopy, j) != node)successors.add(nodeCopy);
+        }
         return successors;
     }
 
