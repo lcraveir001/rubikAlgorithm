@@ -11,6 +11,9 @@ import java.util.*;
     Consider not just the outer colors, but also the inner colors as well.
 */
 
+/**
+Class to hold a 6 2D array side version of a Rubik's cube.
+ */
 public class Cube {
     // instance variables for the Rubik's Cube faces and the hash map for the sides' colors
     private HashMap<String,int[][]> sides;
@@ -21,6 +24,9 @@ public class Cube {
     private int[][] right;
     private int[][] back;
     
+    /**
+    Initializes and randomises a Rubik's cube.
+     */
     public Cube(){
         this.face = randomize();
         this.top = randomize();
@@ -39,6 +45,9 @@ public class Cube {
         
     }
 
+    /**
+    Initializes a Rubik's cube with input sides.
+     */
     public Cube(int[][] face, int[][]top, int[][] bottom, int[][]left, int[][] right, int[][] back){
         this.face = face;
         this.top = top;
@@ -107,7 +116,7 @@ public class Cube {
     }
 
     /**
-     * broken -- need to fix so there can only be 6 squares of each color.
+     * This method initializes a side (2D array).
      */
     private int[][] randomize() {
         Random rand = new Random();
@@ -133,10 +142,16 @@ public class Cube {
         return side;
     }
 
+    /**
+    Returns a given side from the cube.
+     */
     public int[][] getSide(String sideName){
        return sides.get(sideName);
     }
     
+    /**
+    Returns a given row from the cube.
+     */
     public int[] getRow(String sideName, int row){
         int[][] side = getSide(sideName);
         int[] returnRow = new int[3];
@@ -146,6 +161,9 @@ public class Cube {
         return returnRow;
     }
 
+    /**
+    Sets a given row from a side on the cube.
+     */
     public void setRow(String sideName, int row, int[] newVals){
         int[][] side = getSide(sideName);
         for (int index = 0; index < 3; index++) {
@@ -153,6 +171,9 @@ public class Cube {
         }
     }
 
+    /**
+    Sets a given column from a side on the cube.
+     */
     public void setColumn(String sideName, int col, int[] newVals){
         int[][] side = getSide(sideName);
         for (int index = 0; index < 3; index++) {
@@ -160,6 +181,9 @@ public class Cube {
         }
     }
 
+    /**
+    Returns a given column from a side on the cube.
+     */
     public int[] getColumn(String sideName, int col){
         int [][] side = getSide(sideName);
         int[] returnCol = new int[3];
@@ -168,7 +192,10 @@ public class Cube {
             }
         return returnCol;
     }
-
+    
+    /**
+    Sets the values for a given side on the cube.
+     */
     public void setSide(String sideName, int[][] newSide){        
         if(sideName.equals("face")){
             this.face = newSide;
@@ -196,8 +223,10 @@ public class Cube {
         }
      }
 
-     // can be more efficient, look into eliminating j value
-     public Boolean checkSolve() {
+    /**
+    Method to check if the Rubik's cube is solved.
+     */
+    public Boolean checkSolve() {
         // equal to pseduo is_goal(node)
         ArrayList<Integer> colors = new ArrayList<>();
         colors.addAll(List.of(0,1,2,3,4,5));
@@ -229,6 +258,9 @@ public class Cube {
         return output;
     }
 
+    /**
+    Prints out a side of the cube in a readable manner.
+     */
     private String sideToString(String name) {
         String output = "";
         int[][] side = sides.get(name);
