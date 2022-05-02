@@ -123,6 +123,7 @@ public class Cube {
         for (int i = 0; i < side.length; i++) {
             for(int j = 0; j<side.length; j++){
                 int color = rand.nextInt(possibleColors.size()-1);
+                counts.put(Integer.valueOf(color), counts.get(Integer.valueOf(color))+1);
                 side[i][j] = color;
                 if(counts.get(color) >= 6) {
                     possibleColors.remove(Integer.valueOf(color));
@@ -203,8 +204,6 @@ public class Cube {
         for (int[][] side : sides.values()) {
 
             int color = side[0][0];
-            System.out.println(colors);
-            System.out.println(color);
             if (!colors.contains(color)){
                 return false;
             } else {
