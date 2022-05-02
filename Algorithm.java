@@ -3,9 +3,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-//hello every one 
-//this is superior to code together
-
 /**
  * 
  * IDA* pseudo code from: https://en.wikipedia.org/wiki/Iterative_deepening_A*
@@ -13,7 +10,7 @@ import java.util.HashMap;
  */
 public class Algorithm {
 
-    static final HashMap<Integer, String> movementNotation = new HashMap<Integer, String>();;
+    static final HashMap<Integer, String> movementNotation = new HashMap<Integer, String>();
     static final int maxCost = 18; // all cubes can be solved with cost of this
     int costToCurrentNode;
     ArrayDeque<Integer> moves = new ArrayDeque<Integer>();
@@ -123,22 +120,22 @@ public class Algorithm {
         cube.setRow("back", row, right);
         cube.setRow("left", row, back);
         if (row == 0) {
-            int[] top1 = cube.getRow("top", 0);
-            int[] top2 = cube.getRow("top", 1);
-            int[] top3 = cube.getRow("top", 2);
+            int[] top1 = cube.getColumn("top", 0);
+            int[] top2 = cube.getColumn("top", 1);
+            int[] top3 = cube.getColumn("top", 2);
 
-            cube.setColumn("top", 0, top1);
-            cube.setColumn("top", 1, top2);
-            cube.setColumn("top", 2, top3);
+            cube.setRow("top", 2, top1);
+            cube.setRow("top", 1, top2);
+            cube.setRow("top", 0, top3);
         }
         if (row == 2) {
-            int[] bottom1 = cube.getRow("bottom", 0);
-            int[] bottom2 = cube.getRow("bottom", 1);
-            int[] bottom3 = cube.getRow("bottom", 2);
+            int[] bottom1 = cube.getColumn("bottom", 0);
+            int[] bottom2 = cube.getColumn("bottom", 1);
+            int[] bottom3 = cube.getColumn("bottom", 2);
 
-            cube.setColumn("bottom", 0, bottom1);
-            cube.setColumn("bottom", 1, bottom2);
-            cube.setColumn("bottom", 2, bottom3);
+            cube.setRow("bottom", 2, bottom1);
+            cube.setRow("bottom", 1, bottom2);
+            cube.setRow("bottom", 0, bottom3);
         }
 
         return cube;
@@ -184,6 +181,8 @@ public class Algorithm {
     public Cube turnDownForWhat(Cube cube, int col) {
         int[] bottom = cube.getColumn("bottom", col);
         int[] face = cube.getColumn("face", col);
+        face = swap(face);
+
         int[] top = cube.getColumn("top", col);
         int[] back = cube.getColumn("back", col);
 
@@ -234,6 +233,7 @@ public class Algorithm {
             int[] left = cube.getColumn("left", 2);
             int[] top = cube.getRow("top", 2);
             int[] right = cube.getColumn("right", 0);
+            right = swap(right);
             int[] bottom = cube.getRow("bottom", 2);
 
             cube.setRow("top", 2, left);
@@ -251,6 +251,7 @@ public class Algorithm {
             int[] left = cube.getColumn("left", 0);
             int[] top = cube.getRow("top", 0);
             int[] right = cube.getColumn("right", 2);
+            right = swap(right);
             int[] bottom = cube.getRow("bottom", 0);
 
             cube.setRow("top", 0, left);
@@ -260,7 +261,6 @@ public class Algorithm {
         }
 
         return cube;
-
     }
 
     /**
@@ -284,6 +284,7 @@ public class Algorithm {
             int[] top = cube.getRow("top", 2);
             int[] right = cube.getColumn("right", 0);
             int[] bottom = cube.getRow("bottom", 2);
+            bottom = swap(bottom);
 
             cube.setColumn("left", 2, top);
             cube.setRow("top", 2, right);
@@ -301,6 +302,7 @@ public class Algorithm {
             int[] top = cube.getRow("top", 0);
             int[] right = cube.getColumn("right", 2);
             int[] bottom = cube.getRow("bottom", 0);
+            bottom = swap(bottom);
 
             cube.setColumn("left", 0, top);
             cube.setRow("top", 0, right);
@@ -393,21 +395,27 @@ public class Algorithm {
         ArrayList<Cube> successors = new ArrayList<Cube>();
         moves = new ArrayDeque<>();
         Cube nodeCopy = new Cube(node);
-        for(int i = 0; i<=2; i++){
-            if(turnRight(nodeCopy, i )!= node)successors.add(nodeCopy);
+        for (int i = 0; i <= 2; i++) {
+            if (turnRight(nodeCopy, i) != node)
+                successors.add(nodeCopy);
             nodeCopy = new Cube(node);
-            if(turnDownForWhat(nodeCopy, i) != node)successors.add(nodeCopy);
+            if (turnDownForWhat(nodeCopy, i) != node)
+                successors.add(nodeCopy);
             nodeCopy = new Cube(node);
-            if(turnUp(nodeCopy, i) != node)successors.add(nodeCopy);
+            if (turnUp(nodeCopy, i) != node)
+                successors.add(nodeCopy);
             nodeCopy = new Cube(node);
-            if(turnLeft(nodeCopy, i) != node)successors.add(nodeCopy);
+            if (turnLeft(nodeCopy, i) != node)
+                successors.add(nodeCopy);
             nodeCopy = new Cube(node);
         }
-        for(int j=0; j<=1; j++){
+        for (int j = 0; j <= 1; j++) {
             nodeCopy = new Cube(node);
-            if(turnFaceClockwise(nodeCopy, j) != node)successors.add(nodeCopy);
+            if (turnFaceClockwise(nodeCopy, j) != node)
+                successors.add(nodeCopy);
             nodeCopy = new Cube(node);
-            if(turnFaceCounterClockwise(nodeCopy, j) != node)successors.add(nodeCopy);
+            if (turnFaceCounterClockwise(nodeCopy, j) != node)
+                successors.add(nodeCopy);
         }
 
         moves.push(1);
