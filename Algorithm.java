@@ -335,6 +335,10 @@ public class Algorithm {
 
     public int search(ArrayDeque<Cube> path, int costToCurrent, int bound) {
         Integer copyCostToCurrent = costToCurrent;
+        // if(copyCostToCurrent > 18) {
+        // copyCostToCurrent = 0;
+        // path.pop();
+        // }
         System.out.println("\nSearching...");
         System.out.println("Cost to current: " + costToCurrent);
         // f = costToCurrentNode + costToEndGoal()
@@ -348,7 +352,7 @@ public class Algorithm {
 
         // should t be a global variable or should we keep it local?
         Cube node = path.peek();
-        System.out.println("node: " + node.toString());
+        // System.out.println("node: " + node.toString());
         int costToCheapest = costToCheapest(copyCostToCurrent);
         System.out.println("Cost to cheapest: " + costToCheapest);
         int f = copyCostToCurrent + costToCheapest; // f = g + h
@@ -363,15 +367,13 @@ public class Algorithm {
             return -1; // FOUND
 
         }
-        // here [0, 1, 2, 3, 4, 5] is printed...why?
-        // no where is an array printed
         int min = Integer.MAX_VALUE;
         System.out.println("Path length before search: " + path.size());
         ArrayList<Cube> successors = getNextMoves(node);
         System.out.println("Successors length: " + successors.size());
         for (Cube succ : successors) {
             if (!path.contains(succ)) {
-                System.out.println("succ: " + succ.toString());
+                // System.out.println("succ: " + succ.toString());
                 path.push(succ);
                 t = search(path, copyCostToCurrent + 1, bound);
                 System.out.println("t is:" + t);
@@ -397,8 +399,9 @@ public class Algorithm {
         Integer copyCostToCurrent = costToCurrent;
         // equal to pseduo h(node)
         // maybe change fx name to costToCheapest
-        if (copyCostToCurrent > maxCost - 1) {
+        if (copyCostToCurrent > maxCost) {
             return maxCost + 1;
+            // return 0;
         } else {
             return maxCost - copyCostToCurrent;
         }
@@ -430,6 +433,7 @@ public class Algorithm {
             nodeCopy = new Cube(node);
             if (turnLeft(nodeCopy, i) != node)
                 successors.add(nodeCopy);
+            nodeCopy = new Cube(node);
         }
         for (int j = 0; j <= 1; j++) {
             nodeCopy = new Cube(node);
@@ -443,16 +447,16 @@ public class Algorithm {
     }
 
     public static void main(String[] args) {
-        int[][] face = { { 4, 4, 4 }, { 0, 0, 0 }, { 0, 0, 0 } };
-        int[][] top = { { 4, 1, 1 }, { 3, 1, 5 }, { 2, 1, 1 } };
-        int[][] bottom = { { 3, 2, 5 }, { 4, 8, 1 }, { 7, 0, 5 } };
-        int[][] left = { { 0, 0, 0 }, { 3, 3, 3 }, { 3, 3, 3 } };
-        int[][] right = { { 5, 5, 5 }, { 4, 4, 4 }, { 4, 4, 4 } };
-        int[][] back = { { 3, 3, 3 }, { 5, 5, 5 }, { 5, 5, 5 } };
+        int[][] face = { { 4, 4, 4 }, { 0, 0, 0 }, { 4, 4, 4 } };
+        int[][] top = { { 1, 1, 1 }, { 1, 1, 1 }, { 1, 1, 1 } };
+        int[][] bottom = { { 2, 2, 2 }, { 2, 2, 2 }, { 2, 2, 2 } };
+        int[][] left = { { 0, 0, 0 }, { 3, 3, 3 }, { 0, 0, 0 } };
+        int[][] right = { { 5, 5, 5 }, { 4, 4, 4 }, { 5, 5, 5 } };
+        int[][] back = { { 3, 3, 3 }, { 5, 5, 5 }, { 3, 3, 3 } };
 
-        Cube cube = new Cube(face, top, bottom, left, right, back);
+        // Cube cube = new Cube(face, top, bottom, left, right, back);
 
-        // Cube cube = new Cube();
+        Cube cube = new Cube();
         Algorithm algo = new Algorithm();
         System.out.println(cube.toString());
         // System.out.println(algo.turnRight(cube, 2));
